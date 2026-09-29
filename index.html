@@ -1,29 +1,147 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>puzzlevision-reborn.xyz</title>
+    <title>UNDER CONSTRUCTION</title>
     <style>
-        /* Centers everything on the screen naturally */
+        /* Creates the base dark background and centers the layout */
         body {
             text-align: center;
-            font-family: sans-serif;
-            margin-top: 50px;
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding-top: 40px;
+            background-color: #121212; /* Dark background color */
+            color: #e0e0e0; /* Brightened text so it stands out against dark theme */
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Forces the GIF to be nice and big without breaking on mobile screens */
-        .large-gif {
+        /* Generates a pseudo-element overlay spanning the full browser window */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            width: 200%;
+            height: 200%;
+            /* Pure CSS transparent grain pattern */
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px),
+                        radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px);
+            background-size: 4px 4px;
+            background-repeat: repeat;
+            animation: static-shift 0.15s infinite steps(4);
+            opacity: 0.5; /* Note: Standard CSS opacity ranges from 0 to 1, 0.5 matches 50% transparency */
+            pointer-events: none; /* Allows users to click through the overlay layer */
+            z-index: 9999;
+        }
+
+        /* Shifts the grain layer rapidly to mimic television signal noise */
+        @keyframes static-shift {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(2px, 4px); }
+            50% { transform: translate(-4px, 2px); }
+            75% { transform: translate(4px, -2px); }
+            100% { transform: translate(-2px, -4px); }
+        }
+
+        /* Styles your custom under-construction lines */
+        .status-text {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+
+        .stay-tuned {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #aaaaaa;
+            margin-bottom: 25px;
+        }
+
+        /* The Cutout "Hole" in the web page background */
+        .hole-frame {
+            position: relative;
             width: 90%;
-            max-width: 1200px; /* Adjust this number higher if you want it even bigger */
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #080808; /* Darker interior color to make the hole look deep */
+            border-radius: 4px;
+            overflow: hidden;
+            /* Creates a deep shadow gradient pointing inward, mimicking a physical hole */
+            box-shadow: inset 0px 10px 30px rgba(0, 0, 0, 0.95), 
+                        inset 0px -10px 30px rgba(0, 0, 0, 0.95);
+        }
+
+        /* Keeps the GIF nice and big exactly like you wanted */
+        .large-gif {
+            display: block;
+            width: 100%;
             height: auto;
+            position: relative;
+            z-index: 2; /* Sits completely over the hole layer until dropped */
+            cursor: pointer;
+            transform-origin: top center;
+            transition: transform 0.7s cubic-bezier(0.6, -0.28, 0.735, 0.045), opacity 0.5s ease;
+        }
+
+        /* Dropping physics: swings slightly out and falls straight through the hole frame */
+        .large-gif.fall {
+            transform: translateY(120%) rotate(8deg); 
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Secret image styling revealed inside the cutout hole background */
+        .secret-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            z-index: 1; /* Fixed inside the frame underneath the GIF */
+            opacity: 0;
+            transform: scale(0.95); /* Starts slightly shrunk to look distant inside the hole */
+            transition: opacity 0.4s ease 0.2s, transform 0.5s ease 0.2s;
+        }
+
+        /* Brings your secret image smoothly into view when the cutout opens */
+        .secret-image.reveal {
+            opacity: 1;
+            transform: scale(1);
         }
     </style>
 </head>
 <body>
 
-    <p>this does not exist yet, srry</p>
+    <p class="status-text">Sorry folks, this place is still underconstruction</p>
+    <p class="stay-tuned">Stay tuned.</p>
 
-    <!-- Make sure the src matches your uploaded filename exactly -->
-    <img src="https://files.catbox.moe/7dxitu.gif" class="large-gif" alt="Mr. Puzzles Test">
+    <!-- This wrapper acts as the physical hole container -->
+    <div class="hole-frame">
+        <!-- Clickable GIF -->
+        <img id="puzzlesGif" src="https://files.catbox.moe/7dxitu.gif" class="large-gif" alt="Mr. Puzzles Test" onclick="countClicks()">
+        
+        <!-- Hidden Image inside the hole (Put your image path inside src) -->
+        <img id="secretImg" src="https://files.catbox.moe/atyzro.png" class="secret-image" alt="Secret Reveal">
+    </div>
+
+    <!-- Script tracking clicks to trigger the falling sequence -->
+    <script>
+        let clickCount = 0;
+
+        function countClicks() {
+            clickCount++;
+            
+            if (clickCount >= 5) {
+                document.getElementById('puzzlesGif').classList.add('fall');
+                document.getElementById('secretImg').classList.add('reveal');
+            }
+        }
+    </script>
 
 </body>
 </html>
